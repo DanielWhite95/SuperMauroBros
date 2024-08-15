@@ -2,10 +2,10 @@ var gl;
 var canvas;
 var aspectRatio;
 
-var basePath = window.location.origin;
-var OBJModelsDir 	= basePath + "/models/";
-var shaderDir 		= basePath + "/shaders/";
-const textureDir = basePath + "/textures/"
+var basePath = window.location;
+var OBJModelsDir 	= basePath + "./models/";
+var shaderDir 		= basePath + "./shaders/";
+const textureDir = basePath + "./textures/"
 
 //global matrices
 var perspectiveMatrix;
@@ -24,4 +24,4 @@ function requestCORSIfNotSameOrigin(img, url) {
   if ((new URL(url)).origin !== window.location.origin) {
     img.crossOrigin = "";
   }
-}	
+}
