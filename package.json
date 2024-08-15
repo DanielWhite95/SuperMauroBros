@@ -3,11 +3,12 @@
    "version": "1.0.0",
    "main": "index.js",
    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "build": "webpack --config webpack.config.js",
+      "start": "webpack-dev-server"
    },
    "repository": {
       "type": "git",
-      "url": "https://github.com/GenniImparato/ComputerGraphics"
+      "url": "https://github.com/DanielWhite95/SuperMauroBros"
    },
    "keywords": [
       "3d",
@@ -16,7 +17,10 @@
    ],
    "license": "ISC",
    "homepage": "https://super-mauro-bros.herokuapp.com",
-   "dependencies": {
-      "static-server": "^2.2.1"
+   "devDependencies": {
+      "copy-webpack-plugin": "^12.0.2",
+      "webpack": "^5.93.0",
+      "webpack-cli": "^5.1.4",
+      "webpack-dev-server": "^5.0.4"
    }
 }
