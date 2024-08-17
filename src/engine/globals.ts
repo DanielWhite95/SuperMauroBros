@@ -3,10 +3,10 @@ export class Globals {
   public static canvas: HTMLCanvasElement;
   public static aspectRatio: number;
   public static basePath: string = `${window.location}`;
-  public static perspectiveMatrix: number[][];
-  public static viewMatrix: number[][];
-  public static worldMatrix: number[][];
-  public static projectionMatrix: number[][];
+  public static perspectiveMatrix: number[];
+  public static viewMatrix: number[];
+  public static worldMatrix: number[];
+  public static projectionMatrix: number[];
 
   //flag to show/hide bounding boxes of every object in the scene
   public static showBoundingBoxes: boolean = false;
@@ -23,7 +23,7 @@ export class Globals {
   }
 
   public static textureDir() {
-    return Globals.basePath + "textures"
+    return Globals.basePath + "textures/"
   }
 
   public static requestCORSIfNotSameOrigin(img: HTMLImageElement, url: string) {

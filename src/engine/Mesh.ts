@@ -77,7 +77,7 @@ export class Mesh {
       utils.transposeMatrix(matrix),
     );
 
-    var WVMatrix = utils.multiplyMatrices(Globals.viewMatrix, Globals.worldMatrix); // world view matrix
+    var WVMatrix = utils.multiplyMatrices(Globals.viewMatrix, worldMatrix); // world view matrix
     var nMatrix = utils.invertMatrix(utils.transposeMatrix(WVMatrix));
     Globals.gl.uniformMatrix4fv(
       shader.getWorldViewMatrixLocation(),

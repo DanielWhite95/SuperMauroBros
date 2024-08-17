@@ -56,8 +56,8 @@ export class InterfaceOverlay
     public static render()
     {
         //parallel projection
-        Globals.viewMatrix = utils.identityMatrix() as unknown as number[][];
-        Globals.projectionMatrix = utils.identityMatrix() as unknown as number[][];
+        Globals.viewMatrix = utils.identityMatrix()
+        Globals.projectionMatrix = utils.identityMatrix()
 
         //update health and energy from player
         InterfaceOverlay.healthBar.setScale(0.32, 0.8*Scene.player.health, 0);
@@ -79,8 +79,8 @@ export class InterfaceOverlay
     public static renderGameOver()
     {
         //parallel projection
-      Globals.viewMatrix = utils.identityMatrix() as unknown as number[][];
-        Globals.projectionMatrix = utils.identityMatrix() as unknown as number[][];
+      Globals.viewMatrix = utils.identityMatrix()
+        Globals.projectionMatrix = utils.identityMatrix()
 
         InterfaceOverlay.gameOverScreen.render();
     }
@@ -88,8 +88,8 @@ export class InterfaceOverlay
     public static renderCredits()
     {
         //parallel projection
-        Globals.viewMatrix = utils.identityMatrix() as unknown as number[][];
-        Globals.projectionMatrix = utils.identityMatrix() as unknown as number[][];
+        Globals.viewMatrix = utils.identityMatrix()
+        Globals.projectionMatrix = utils.identityMatrix()
 
         InterfaceOverlay.credits1.render();
         InterfaceOverlay.credits2.render();

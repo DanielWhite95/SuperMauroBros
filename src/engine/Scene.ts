@@ -936,13 +936,13 @@ export class Scene {
     for (var i = 0; i < Scene.objects.length; i++) Scene.objects[i].render();
 
     //game over screen
-    if (this.gameOver) {
+    if (Scene.gameOver) {
       InterfaceOverlay.renderGameOver();
 
       //respawn
       if (Input.isMouseDown()) {
         Scene.createObjects();
-        this.gameOver = false;
+        Scene.gameOver = false;
       }
     }
     //Scene.player just died

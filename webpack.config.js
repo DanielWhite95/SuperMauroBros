@@ -29,8 +29,6 @@ module.exports = {
               { from: 'shaders', to: 'shaders'},
               { from: 'models', to: 'models'},
               { from: 'textures', to: 'textures'},
-              { from: 'engine', to: 'engine' },
-              { from: 'lib', to: 'lib'}
           ]
       })
   ]

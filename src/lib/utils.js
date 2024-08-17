@@ -295,7 +295,7 @@ export function identityMatrix3() {
 
 // returns the 3x3 submatrix from a Matrix4x4
 export function sub3x3from4x4(m) {
-  out = [];
+  var out = [];
   out[0] = m[0];
   out[1] = m[1];
   out[2] = m[2];
@@ -310,7 +310,7 @@ export function sub3x3from4x4(m) {
 
 // Multiply the mat3 with a vec3.
 export function multiplyMatrix3Vector3(m, a) {
-  out = [];
+  var out = [];
   var x = a[0],
     y = a[1],
     z = a[2];
@@ -323,7 +323,7 @@ export function multiplyMatrix3Vector3(m, a) {
 //Transpose the values of a mat3
 
 export function transposeMatrix3(a) {
-  out = [];
+  var out = [];
 
   out[0] = a[0];
   out[1] = a[3];
@@ -339,7 +339,7 @@ export function transposeMatrix3(a) {
 }
 
 export function invertMatrix3(m) {
-  out = [];
+  var out = [];
 
   var a00 = m[0],
     a01 = m[1],
@@ -581,7 +581,7 @@ export function multiplyMatrixVector(m, v) {
 export function MakeTranslateMatrix(dx, dy, dz) {
   // Create a transform matrix for a translation of ({dx}, {dy}, {dz}).
 
-  var out = this.identityMatrix();
+  var out = identityMatrix();
 
   out[3] = dx;
   out[7] = dy;
@@ -592,9 +592,9 @@ export function MakeTranslateMatrix(dx, dy, dz) {
 export function MakeRotateXMatrix(a) {
   // Create a transform matrix for a rotation of {a} along the X axis.
 
-  var out = this.identityMatrix();
+  var out = identityMatrix();
 
-  var adeg = this.degToRad(a);
+  var adeg = degToRad(a);
   var c = Math.cos(adeg);
   var s = Math.sin(adeg);
 
@@ -608,9 +608,9 @@ export function MakeRotateXMatrix(a) {
 export function MakeRotateYMatrix(a) {
   // Create a transform matrix for a rotation of {a} along the Y axis.
 
-  var out = this.identityMatrix();
+  var out = identityMatrix();
 
-  var adeg = this.degToRad(a);
+  var adeg = degToRad(a);
 
   var c = Math.cos(adeg);
   var s = Math.sin(adeg);
@@ -625,9 +625,9 @@ export function MakeRotateYMatrix(a) {
 export function MakeRotateZMatrix(a) {
   // Create a transform matrix for a rotation of {a} along the Z axis.
 
-  var out = this.identityMatrix();
+  var out = identityMatrix();
 
-  var adeg = this.degToRad(a);
+  var adeg = degToRad(a);
   var c = Math.cos(adeg);
   var s = Math.sin(adeg);
 
@@ -641,7 +641,7 @@ export function MakeRotateZMatrix(a) {
 export function MakeScaleMatrix(s) {
   // Create a transform matrix for proportional scale
 
-  var out = this.identityMatrix();
+  var out = identityMatrix();
 
   out[0] = out[5] = out[10] = s;
 
@@ -652,7 +652,7 @@ export function MakeScaleMatrix(s) {
 export function MakeScaleMatrix_(sx, sy, sz) {
   // Create a transform matrix for proportional scale
 
-  var out = this.identityMatrix();
+  var out = identityMatrix();
 
   out[0] = sx;
   out[5] = sy;
@@ -664,17 +664,17 @@ export function MakeScaleMatrix_(sx, sy, sz) {
 //***Projection Matrix operations
 export function MakeWorld(tx, ty, tz, rx, ry, rz, s) {
   //Creates a world matrix for an object.
+  var out = []
+  var Rx = MakeRotateXMatrix(rx);
+  var Ry = MakeRotateYMatrix(ry);
+  var Rz = MakeRotateZMatrix(rz);
+  var S = MakeScaleMatrix(s);
+  var T = MakeTranslateMatrix(tx, ty, tz);
 
-  var Rx = this.MakeRotateXMatrix(rx);
-  var Ry = this.MakeRotateYMatrix(ry);
-  var Rz = this.MakeRotateZMatrix(rz);
-  var S = this.MakeScaleMatrix(s);
-  var T = this.MakeTranslateMatrix(tx, ty, tz);
-
-  out = this.multiplyMatrices(Rz, S);
-  out = this.multiplyMatrices(Ry, out);
-  out = this.multiplyMatrices(Rx, out);
-  out = this.multiplyMatrices(T, out);
+  out = multiplyMatrices(Rz, S);
+  out = multiplyMatrices(Ry, out);
+  out = multiplyMatrices(Rx, out);
+  out = multiplyMatrices(T, out);
 
   return out;
 }
@@ -682,17 +682,17 @@ export function MakeWorld(tx, ty, tz, rx, ry, rz, s) {
 //added func with non-proportional scaling
 export function MakeWorld_(tx, ty, tz, rx, ry, rz, sx, sy, sz) {
   //Creates a world matrix for an object.
+  var out = [];
+  var Rx = MakeRotateXMatrix(rx);
+  var Ry = MakeRotateYMatrix(ry);
+  var Rz = MakeRotateZMatrix(rz);
+  var S = MakeScaleMatrix_(sx, sy, sz);
+  var T = MakeTranslateMatrix(tx, ty, tz);
 
-  var Rx = this.MakeRotateXMatrix(rx);
-  var Ry = this.MakeRotateYMatrix(ry);
-  var Rz = this.MakeRotateZMatrix(rz);
-  var S = this.MakeScaleMatrix_(sx, sy, sz);
-  var T = this.MakeTranslateMatrix(tx, ty, tz);
-
-  out = this.multiplyMatrices(Rz, S);
-  out = this.multiplyMatrices(Rx, out);
-  out = this.multiplyMatrices(Ry, out);
-  out = this.multiplyMatrices(T, out);
+  out = multiplyMatrices(Rz, S);
+  out = multiplyMatrices(Rx, out);
+  out = multiplyMatrices(Ry, out);
+  out = multiplyMatrices(T, out);
 
   return out;
 }
@@ -700,19 +700,19 @@ export function MakeWorld_(tx, ty, tz, rx, ry, rz, sx, sy, sz) {
 export function MakeView(cx, cy, cz, elev, ang) {
   // Creates in {out} a view matrix. The camera is centerd in ({cx}, {cy}, {cz}).
   // It looks {ang} degrees on y axis, and {elev} degrees on the x axis.
-
+  var out = []
   var T = [];
   var Rx = [];
   var Ry = [];
   var tmp = [];
-  var out = [];
 
-  T = this.MakeTranslateMatrix(-cx, -cy, -cz);
-  Rx = this.MakeRotateXMatrix(-elev);
-  Ry = this.MakeRotateYMatrix(-ang);
 
-  tmp = this.multiplyMatrices(Ry, T);
-  out = this.multiplyMatrices(Rx, tmp);
+  T = MakeTranslateMatrix(-cx, -cy, -cz);
+  Rx = MakeRotateXMatrix(-elev);
+  Ry = MakeRotateYMatrix(-ang);
+
+  tmp = multiplyMatrices(Ry, T);
+  out = multiplyMatrices(Rx, tmp);
 
   return out;
 }
@@ -722,9 +722,9 @@ export function MakePerspective(fovy, a, n, f) {
   // {fovy} contains the vertical field-of-view in degrees. {a} is the aspect ratio.
   // {n} is the distance of the near plane, and {f} is the far plane.
 
-  var perspective = this.identityMatrix();
+  var perspective = identityMatrix();
 
-  var halfFovyRad = this.degToRad(fovy / 2); // stores {fovy/2} in radiants
+  var halfFovyRad = degToRad(fovy / 2); // stores {fovy/2} in radiants
   var ct = 1.0 / Math.tan(halfFovyRad); // cotangent of {fov/2}
 
   perspective[0] = ct / a;

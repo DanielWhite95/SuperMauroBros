@@ -84,7 +84,7 @@ export class LookAtCamera extends Camera
         this.z += this.zLook;
 
         Globals.viewMatrix = utils.MakeView(this.x, this.y, this.z, -this.elevation, this.angle);
-        Globals.projectionMatrix = utils.multiplyMatrices(Globals.perspectiveMatrix, Globals.viewMatrix) as unknown as number[][];
+      Globals.projectionMatrix = utils.multiplyMatrices(Globals.perspectiveMatrix, Globals.viewMatrix);
 
         Scene.player.flashlight.setRotation(-this.elevation, 0, 0);
     }
@@ -142,7 +142,7 @@ export class FirstPersonCamera  extends Camera
 
 
         Globals.viewMatrix = utils.MakeView(this.x, this.y, this.z, -this.elevation, this.angle);
-      Globals.projectionMatrix = utils.multiplyMatrices(Globals.perspectiveMatrix, Globals.viewMatrix) as unknown as number[][];
+      Globals.projectionMatrix = utils.multiplyMatrices(Globals.perspectiveMatrix, Globals.viewMatrix);
 
         Scene.player.flashlight.setRotation(-this.elevation, 0, 0);
     }
