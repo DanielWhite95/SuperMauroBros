@@ -1,204 +1,217 @@
-class Door3D extends GroupObject3D
+import { Animator, Animation, BezierCurve, KeyFrame } from "../Animator";
+import { Scene } from "../Scene";
+import { GroupObject3D } from "./GroupObject3D";
+import { Object3D } from "./Object3D";
+import { TriggerBox3D } from "./TriggerBox3D";
+
+export class Door3D extends GroupObject3D
 {
-	constructor(mesh, material, automatic, openFromRight)
-	{ 
-		super();
+    frontTrigger: any;
+    backTrigger: any;
+    animator: Animator;
+    constructor(mesh, material, automatic, openFromRight)
+    {
+      super(mesh, material);
 
-		var doorPar = new GroupObject3D(null, material);
-		
-		//door object
-		var door = new Object3D(mesh, material);
-		door.setParent(doorPar);
+        var doorPar = new GroupObject3D(null, material);
 
-		if(!openFromRight)
-			door.setPosition(-door.boundingBoxes[0].dx/2, 0, 0);
-		else
-			door.setPosition(door.boundingBoxes[0].dx/2, 0, 0);
+        //door object
+        var door = new Object3D(mesh, material);
+        door.setParent(doorPar);
 
-		doorPar.addObject3D(door);
-		this.addObject3D(doorPar);
+        if(!openFromRight)
+            door.setPosition(-door.boundingBoxes[0].dx/2, 0, 0);
+        else
+            door.setPosition(door.boundingBoxes[0].dx/2, 0, 0);
 
-		if(automatic)
-		{
-			//triggers
-			this.frontTrigger = new TriggerBox3D(door.boundingBoxes[0].dx*3, door.boundingBoxes[0].dy, door.boundingBoxes[0].dx*2, this);
-			this.frontTrigger.setPosition(-door.boundingBoxes[0].dx/2, door.boundingBoxes[0].dy/2, door.boundingBoxes[0].dx);
-			this.frontTrigger.boundingBoxes[0].setScaleCorrection(1.1, 1.1, 1.1);
-			this.addObject3D(this.frontTrigger);
+        doorPar.addObject3D(door);
+        this.addObject3D(doorPar);
 
-			this.backTrigger = new TriggerBox3D(door.boundingBoxes[0].dx*3, door.boundingBoxes[0].dy, door.boundingBoxes[0].dx*2, this);
-			this.backTrigger.setPosition(-door.boundingBoxes[0].dx/2, door.boundingBoxes[0].dy/2, -door.boundingBoxes[0].dx);
-			this.backTrigger.boundingBoxes[0].setScaleCorrection(1.1, 1.1, 1.1);
-			this.addObject3D(this.backTrigger);
+        if(automatic)
+        {
+            //triggers
+            this.frontTrigger = new TriggerBox3D(door.boundingBoxes[0].dx*3, door.boundingBoxes[0].dy, door.boundingBoxes[0].dx*2, this);
+            this.frontTrigger.setPosition(-door.boundingBoxes[0].dx/2, door.boundingBoxes[0].dy/2, door.boundingBoxes[0].dx);
+            this.frontTrigger.boundingBoxes[0].setScaleCorrection(1.1, 1.1, 1.1);
+            this.addObject3D(this.frontTrigger);
 
-			this.frontTrigger.onTrigger = function(inst)	
-			{	inst.open();	}
-		
-			this.frontTrigger.onUntrigger = function(inst)	
-			{	inst.close();	}
+            this.backTrigger = new TriggerBox3D(door.boundingBoxes[0].dx*3, door.boundingBoxes[0].dy, door.boundingBoxes[0].dx*2, this);
+            this.backTrigger.setPosition(-door.boundingBoxes[0].dx/2, door.boundingBoxes[0].dy/2, -door.boundingBoxes[0].dx);
+            this.backTrigger.boundingBoxes[0].setScaleCorrection(1.1, 1.1, 1.1);
+            this.addObject3D(this.backTrigger);
 
-			this.backTrigger.onTrigger = function(inst)
-			{	inst.open();	}
-		
-			this.backTrigger.onUntrigger = function(inst)
-			{	inst.close();	}
-		}
-		
-		this.animator = new Animator(doorPar);
-		var doorPath = new BezierCurve();
+            this.frontTrigger.onTrigger = function(inst)
+            {	inst.open();	}
 
-		doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 0, 0));
+            this.frontTrigger.onUntrigger = function(inst)
+            {	inst.close();	}
 
-		if(!openFromRight)
-			doorPath.addPoint(new KeyFrame(0, 0, 0, 0, -90, 0));
-		else
-			doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 90, 0));
-  
-		this.animator.addAnimation(new Animation(doorPath, 50));
-		this.animator.enablePositionAnimation(false);
-		this.animator.enableScaleAnimation(false);
+            this.backTrigger.onTrigger = function(inst)
+            {	inst.open();	}
 
-	}
+            this.backTrigger.onUntrigger = function(inst)
+            {	inst.close();	}
+        }
 
-	preUpdate()
-	{
-		this.animator.update();
-	}
+        this.animator = new Animator(doorPar);
+        var doorPath = new BezierCurve();
 
-	open()
-	{
-		this.animator.play(false);
-	}
+        doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 0, 0));
 
-	close()
-	{
-		this.animator.playReverse(false);
-	}
+        if(!openFromRight)
+            doorPath.addPoint(new KeyFrame(0, 0, 0, 0, -90, 0));
+        else
+            doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 90, 0));
+
+        this.animator.addAnimation(new Animation(doorPath, 50));
+        this.animator.enablePositionAnimation(false);
+        this.animator.enableScaleAnimation(false);
+
+    }
+
+    preUpdate()
+    {
+        this.animator.update();
+    }
+
+    open()
+    {
+        this.animator.play(false);
+    }
+
+    close()
+    {
+        this.animator.playReverse(false);
+    }
 }
 
-class DoorKey3D extends GroupObject3D
+export class DoorKey3D extends GroupObject3D
 {
-	constructor(mesh, material, keyHoleMesh, keyMesh, keyHoleMaterial, linkedDoor, openFromRight)
-	{ 
-		super();
+    key: Object3D;
+    keyAnim: Animator;
+    frontTrigger: TriggerBox3D;
+    animator: Animator;
+    constructor(mesh, material, keyHoleMesh, keyMesh, keyHoleMaterial, linkedDoor, openFromRight)
+    {
+      super(mesh, material);
 
-		var doorPar = new GroupObject3D(null, material);
-		
-		//door object
-		var door = new Object3D(mesh, material);
-		door.setParent(doorPar);
+        var doorPar = new GroupObject3D(null, material);
 
-		if(!openFromRight)
-			door.setPosition(-door.boundingBoxes[0].dx/2, 0, 0);
-		else
-			door.setPosition(door.boundingBoxes[0].dx/2, 0, 0);
+        //door object
+        var door = new Object3D(mesh, material);
+        door.setParent(doorPar);
 
-		doorPar.addObject3D(door);
+        if(!openFromRight)
+            door.setPosition(-door.boundingBoxes[0].dx/2, 0, 0);
+        else
+            door.setPosition(door.boundingBoxes[0].dx/2, 0, 0);
 
-		//keyhole object
-		var keyhole = new Object3D(keyHoleMesh, keyHoleMaterial);
-		keyhole.setScale(5, 5, 5);
-		keyhole.boundingBoxes[0].setScaleCorrection(0, 0, 0);
-		if(!openFromRight)
-			keyhole.setPosition(-door.boundingBoxes[0].dx + keyhole.boundingBoxes[0].dx + 0.5, 
-							door.boundingBoxes[0].dy/2 - keyhole.boundingBoxes[0].dy/2 - 0.5, 
-							door.boundingBoxes[0].dz/2);
-		else
-			keyhole.setPosition(door.boundingBoxes[0].dx - keyhole.boundingBoxes[0].dx - 0.5, 
-							door.boundingBoxes[0].dy/2 - keyhole.boundingBoxes[0].dy/2  - 0.5, 
-							door.boundingBoxes[0].dz/2);
-		
-		doorPar.addObject3D(keyhole);
+        doorPar.addObject3D(door);
 
-		//key object
-		this.key = new Object3D(keyMesh, keyHoleMaterial);
-		this.key.setScale(5, 5, 5);
-		this.key.setPosition(keyhole.x, 
-						keyhole.y, 
-						keyhole.z+2);
-		this.key.setRotation(-90, 0, 0);
-		this.key.setVisible(false);
-		this.key.boundingBoxes[0].setScaleCorrection(0, 0, 0);
+        //keyhole object
+        var keyhole = new Object3D(keyHoleMesh, keyHoleMaterial);
+        keyhole.setScale(5, 5, 5);
+        keyhole.boundingBoxes[0].setScaleCorrection(0, 0, 0);
+        if(!openFromRight)
+            keyhole.setPosition(-door.boundingBoxes[0].dx + keyhole.boundingBoxes[0].dx + 0.5,
+                            door.boundingBoxes[0].dy/2 - keyhole.boundingBoxes[0].dy/2 - 0.5,
+                            door.boundingBoxes[0].dz/2);
+        else
+            keyhole.setPosition(door.boundingBoxes[0].dx - keyhole.boundingBoxes[0].dx - 0.5,
+                            door.boundingBoxes[0].dy/2 - keyhole.boundingBoxes[0].dy/2  - 0.5,
+                            door.boundingBoxes[0].dz/2);
 
-		//key animator
-		this.keyAnim = new Animator(this.key, this);
-		this.keyAnim.enablePositionAnimation(true);
-		this.keyAnim.enableRotationAnimation(true);
-		this.keyAnim.enableScaleAnimation(false);
+        doorPar.addObject3D(keyhole);
 
-		// movement
-		var tempPath = new BezierCurve();
-		tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+2.5, 0, 0, 0));
-		tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 0));
-		this.keyAnim.addAnimation(new Animation(tempPath, 40));
-		
-		//rotation
-		tempPath = new BezierCurve();
-		tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 0));
-		tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 90));
-		this.keyAnim.addAnimation(new Animation(tempPath, 40));
+        //key object
+        this.key = new Object3D(keyMesh, keyHoleMaterial);
+        this.key.setScale(5, 5, 5);
+        this.key.setPosition(keyhole.x,
+                        keyhole.y,
+                        keyhole.z+2);
+        this.key.setRotation(-90, 0, 0);
+        this.key.setVisible(false);
+        this.key.boundingBoxes[0].setScaleCorrection(0, 0, 0);
 
-		//rotation back
-		tempPath = new BezierCurve();
-		tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 90));
-		tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 0));
-		this.keyAnim.addAnimation(new Animation(tempPath, 40));
+        //key animator
+        this.keyAnim = new Animator(this.key, this);
+        this.keyAnim.enablePositionAnimation(true);
+        this.keyAnim.enableRotationAnimation(true);
+        this.keyAnim.enableScaleAnimation(false);
+
+        // movement
+        var tempPath = new BezierCurve();
+        tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+2.5, 0, 0, 0));
+        tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 0));
+        this.keyAnim.addAnimation(new Animation(tempPath, 40));
+
+        //rotation
+        tempPath = new BezierCurve();
+        tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 0));
+        tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 90));
+        this.keyAnim.addAnimation(new Animation(tempPath, 40));
+
+        //rotation back
+        tempPath = new BezierCurve();
+        tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 90));
+        tempPath.addPoint(new KeyFrame(keyhole.x, keyhole.y, keyhole.z+0.5, 0, 0, 0));
+        this.keyAnim.addAnimation(new Animation(tempPath, 40));
 
 
-		//open door after key animation
-		this.keyAnim.onStop = function(inst) {inst.open();	if(linkedDoor)linkedDoor.open();};
-		
-		doorPar.addObject3D(this.key);
+        //open door after key animation
+        this.keyAnim.onStop = function(inst) {inst.open();	if(linkedDoor)linkedDoor.open();};
 
-		this.addObject3D(doorPar);
+        doorPar.addObject3D(this.key);
 
-		//triggers
-		this.frontTrigger = new TriggerBox3D(door.boundingBoxes[0].dx*3, door.boundingBoxes[0].dy, door.boundingBoxes[0].dx*2, this);
-		this.frontTrigger.setPosition(-door.boundingBoxes[0].dx/2, door.boundingBoxes[0].dy/2, door.boundingBoxes[0].dx);
-		this.frontTrigger.boundingBoxes[0].setScaleCorrection(1.1, 1.1, 1.1);
-		this.addObject3D(this.frontTrigger);
+        this.addObject3D(doorPar);
 
-		this.animator = new Animator(doorPar);
-		var doorPath = new BezierCurve();
+        //triggers
+        this.frontTrigger = new TriggerBox3D(door.boundingBoxes[0].dx*3, door.boundingBoxes[0].dy, door.boundingBoxes[0].dx*2, this);
+        this.frontTrigger.setPosition(-door.boundingBoxes[0].dx/2, door.boundingBoxes[0].dy/2, door.boundingBoxes[0].dx);
+        this.frontTrigger.boundingBoxes[0].setScaleCorrection(1.1, 1.1, 1.1);
+        this.addObject3D(this.frontTrigger);
 
-		doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 0, 0));
+        this.animator = new Animator(doorPar);
+        var doorPath = new BezierCurve();
 
-		if(!openFromRight)
-			doorPath.addPoint(new KeyFrame(0, 0, 0, 0, -90, 0));
-		else
-			doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 90, 0));
-  
-		this.animator.addAnimation(new Animation(doorPath, 50));
-		this.animator.enablePositionAnimation(false);
-		this.animator.enableScaleAnimation(false);
+        doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 0, 0));
 
-		this.frontTrigger.onTrigger = function(inst)	
-		{	
-			//plays key animation
-			if(player.hasKey)
-			{
-				inst.key.setVisible(true);
-				inst.keyAnim.play(false);	
-				player.hasKey = false;
-				inst.frontTrigger.removeFromScene();
-			}
-			
-		}
-	}
+        if(!openFromRight)
+            doorPath.addPoint(new KeyFrame(0, 0, 0, 0, -90, 0));
+        else
+            doorPath.addPoint(new KeyFrame(0, 0, 0, 0, 90, 0));
 
-	preUpdate()
-	{
-		this.animator.update();
-		this.keyAnim.update();
-	}
+        this.animator.addAnimation(new Animation(doorPath, 50));
+        this.animator.enablePositionAnimation(false);
+        this.animator.enableScaleAnimation(false);
 
-	open()
-	{
-		this.animator.play(false);
-	}
+        this.frontTrigger.onTrigger = function(inst)
+        {
+            //plays key animation
+            if(Scene.player.hasKey)
+            {
+                inst.key.setVisible(true);
+                inst.keyAnim.play(false);
+              Scene.player.hasKey = false;
+                inst.frontTrigger.removeFromScene();
+            }
 
-	close()
-	{
-		this.animator.playReverse(false);
-	}
+        }
+    }
+
+    public preUpdate()
+    {
+        this.animator.update();
+        this.keyAnim.update();
+    }
+
+    public open()
+    {
+        this.animator.play(false);
+    }
+
+    public close()
+    {
+        this.animator.playReverse(false);
+    }
 }

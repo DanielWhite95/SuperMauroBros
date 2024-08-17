@@ -340,7 +340,7 @@ export class Animator {
   animateScale = true;
   reverse = false;
 
-  constructor(object, instance) {
+  constructor(object, instance = null) {
     this.animations = [];
     this.duration = 0;
     this.object = object;

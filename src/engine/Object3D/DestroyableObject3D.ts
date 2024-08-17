@@ -1,33 +1,38 @@
-class DestroyableObject3D extends Object3D
+import { Object3D } from "./Object3D";
+
+export class DestroyableObject3D extends Object3D
 {
-	constructor(mesh, material, damagedMaterial)
-	{
-		super(mesh, material);	
+    damagedMaterial: any;
+    standardMaterial: any;
+    damagedTime: number;
+    constructor(mesh, material, damagedMaterial)
+    {
+        super(mesh, material);
 
-		this.damagedMaterial = damagedMaterial;
-		this.standardMaterial = material;
-		this.damagedTime = 0;
-	}
+        this.damagedMaterial = damagedMaterial;
+        this.standardMaterial = material;
+        this.damagedTime = 0;
+    }
 
-	preUpdate()
-	{
-		this.damagedTime++;
+  public preUpdate()
+    {
+        this.damagedTime++;
 
-		if(this.damagedTime > 15)
-		{
-			this.setMaterial(this.standardMaterial);
-		}
-	}
+        if(this.damagedTime > 15)
+        {
+            this.setMaterial(this.standardMaterial);
+        }
+    }
 
-	damage(val)
-	{
-		this.setMaterial(this.damagedMaterial);
-		this.damagedTime = 0;
+    public damage(val)
+    {
+        this.setMaterial(this.damagedMaterial);
+        this.damagedTime = 0;
 
-		this.health -= val;
-		if(this.health <= 0)
-		{
-			this.removeFromScene();
-		}
-	}
+        this.health -= val;
+        if(this.health <= 0)
+        {
+            this.removeFromScene();
+        }
+    }
 }

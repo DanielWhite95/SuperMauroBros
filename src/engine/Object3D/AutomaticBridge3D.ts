@@ -1,46 +1,55 @@
-class AutomaticBridge3D extends GroupObject3D
+import { Animator, BezierCurve, KeyFrame, Animation } from "../Animator";
+import { GroupObject3D } from "./GroupObject3D";
+import { Object3D } from "./Object3D";
+import { TriggerBox3D } from "./TriggerBox3D";
+
+export class AutomaticBridge3D extends GroupObject3D
 {
-	constructor(triggDx, triggDy, triggDz, mesh, material)
-	{ 
-		super();
+  mainObj
+  animator
+  trigger
 
-		//main object
-		this.mainObj = new Object3D(mesh, material);
-		this.addObject3D(this.mainObj);
-		this.mainObj.setScale(1.5, 1.5, 1.5);
+    constructor(triggDx, triggDy, triggDz, mesh, material)
+    {
+      super(mesh, material);
 
-		//animation
-		this.animator = new Animator(this.mainObj);
+        //main object
+        this.mainObj = new Object3D(mesh, material);
+        this.addObject3D(this.mainObj);
+        this.mainObj.setScale(1.5, 1.5, 1.5);
 
-		var path = new BezierCurve();
+        //animation
+        this.animator = new Animator(this.mainObj);
 
-		path.addPoint(new KeyFrame(0, -50, 0));
-		path.addPoint(new KeyFrame(0, 0, 0));
-  
-		this.animator.addAnimation(new Animation(path, 60));
-		this.animator.enablePositionAnimation(true);
-		this.animator.enableScaleAnimation(false);
+        var path = new BezierCurve();
 
-		//trigger
-		this.trigger = new TriggerBox3D(this.boundingBoxes[0].dx+triggDx, this.boundingBoxes[0].dy+triggDy, this.boundingBoxes[0].dz+triggDz, this);
-		this.addObject3D(this.trigger);
+        path.addPoint(new KeyFrame(0, -50, 0));
+        path.addPoint(new KeyFrame(0, 0, 0));
 
-		this.trigger.onTrigger = this.activate;
-		this.trigger.onUntrigger = this.deactivate;
-	}
+        this.animator.addAnimation(new Animation(path, 60));
+        this.animator.enablePositionAnimation(true);
+        this.animator.enableScaleAnimation(false);
 
-	preUpdate()
-	{
-		this.animator.update();
-	}
+        //trigger
+        this.trigger = new TriggerBox3D(this.boundingBoxes[0].dx+triggDx, this.boundingBoxes[0].dy+triggDy, this.boundingBoxes[0].dz+triggDz, this);
+        this.addObject3D(this.trigger);
 
-	activate(instance)
-	{
-		instance.animator.play(false);
-	}
+        this.trigger.onTrigger = this.activate;
+        this.trigger.onUntrigger = this.deactivate;
+    }
 
-	deactivate(instance)
-	{
-		instance.animator.playReverse(false);
-	}
+    preUpdate()
+    {
+        this.animator.update();
+    }
+
+    activate(instance)
+    {
+        instance.animator.play(false);
+    }
+
+    deactivate(instance)
+    {
+        instance.animator.playReverse(false);
+    }
 }

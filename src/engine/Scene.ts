@@ -9,7 +9,25 @@ import { TextureMaterial, TextureDiffuse, LiquidTexture } from "./Texture";
 import { DiffuseMaterial, SimpleMaterial, SpecularMaterial } from "./Materials";
 import { Light, PointLight, SpotLight } from "./Lights";
 import { LookAtCamera, FirstPersonCamera } from "./Camera";
+import { Player } from "./Player";
 import { CameraKeyFrame, KeyFrame, BezierCurve, CameraBezierCurve, Animation, CameraAnimator } from "./Animator";
+import { Object3D } from "./Object3D/Object3D";
+import { Lava3D } from "./Object3D/Lava3D";
+import { GravityTrigger3D } from "./Object3D/GravityTrigger3D";
+
+import { Key3D } from "./Object3D/Key3D";
+import { AutomaticBridge3D } from "./Object3D/AutomaticBridge3D";
+import { Lantern3D } from "./Object3D/Lantern3D";
+import { Door3D, DoorKey3D,  } from "./Object3D/Door3D";
+import { TriggerBox3D } from "./Object3D/TriggerBox3D";
+import { GhostSpawner3D } from "./Object3D/Ghost3D";
+import { Tree3D } from "./Object3D/Tree3D";
+import { Castle3D, doorToDungeonL, doorToDungeonR } from "./Object3D/Castle3D";
+import { DestroyableObject3D } from "./Object3D/DestroyableObject3D";
+import { MobileObject3D } from "./Object3D/MobileObject3D";
+import { InterfaceOverlay } from "./InterfaceOverlay"
+
+
 
 export class Scene {
   ///MESHES
@@ -77,8 +95,8 @@ export class Scene {
   public static ghostMaterial: TextureMaterial;
   public static ghostDamagedMaterial: TextureMaterial;
   public static ghostTongueMaterial: SimpleMaterial;
-  public static keyMaterial: TextureMaterial;
-  public static lavaMaterial: TextureMaterial;
+  public static keyMaterial: SpecularMaterial;
+  public static lavaMaterial: SimpleMaterial;
   public static lanternTex: TextureMaterial;
   public static windmillTex: TextureMaterial;
   public static flashlightTex: TextureMaterial;
@@ -89,6 +107,7 @@ export class Scene {
   public static lights = []; // should have maximum 3 lights
   public static lanterns = [];
   public static materials: SimpleMaterial[] = [];
+
 
   //collision group 1
   public static rocksCratesCollGroup = [];
@@ -249,16 +268,16 @@ export class Scene {
   }
 
   //add at the end
-  addObject3D(object) {
+  public static addObject3D(object) {
     Scene.objects.push(object);
   }
 
   //add at the beginning
-  addObject3D_(object) {
+  public static addObject3D_(object) {
     Scene.objects.unshift(object);
   }
 
-  removeObject3D(object) {
+  public static removeObject3D(object) {
     //remove from scene
     for (var i = 0; i < Scene.objects.length; i++)
       if (Scene.objects[i] == object) Scene.objects.splice(i, 1);
@@ -268,7 +287,7 @@ export class Scene {
       if (Scene.rocksCratesCollGroup[i] == object) Scene.rocksCratesCollGroup.splice(i, 1);
   }
 
-  clearLanterns() {
+  public static clearLanterns() {
     for (var i = 0; i < Scene.lanterns.length; i++) {
       Scene.lanterns[i].removeFromScene();
     }
@@ -367,7 +386,7 @@ export class Scene {
     trigg.registerObject3D(tmpObj);
     Scene.rocksCratesCollGroup.push(tmpObj);
 
-    var tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
+    tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
     tmpObj.setPosition(-45, 150, 35);
     tmpObj.setScale(0.2, 0.2, 0.3);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -376,7 +395,7 @@ export class Scene {
     Scene.rocksCratesCollGroup.push(tmpObj);
 
     //destroyable wood boxes
-    var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+    tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
     tmpObj.setPosition(-25, 50, 40);
     tmpObj.setScale(2, 2, 2);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -384,7 +403,7 @@ export class Scene {
     trigg.registerObject3D(tmpObj);
     Scene.rocksCratesCollGroup.push(tmpObj);
 
-    var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+    tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
     tmpObj.setPosition(-23, 80, 40);
     tmpObj.setScale(2, 3, 2);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -392,7 +411,7 @@ export class Scene {
     trigg.registerObject3D(tmpObj);
     Scene.rocksCratesCollGroup.push(tmpObj);
 
-    var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+    tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
     tmpObj.setPosition(-38, 105, 0);
     tmpObj.setScale(3, 3, 3);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -400,7 +419,7 @@ export class Scene {
     trigg.registerObject3D(tmpObj);
     Scene.rocksCratesCollGroup.push(tmpObj);
 
-    var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+    tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
     tmpObj.setPosition(-45, 100, 35);
     tmpObj.setScale(4, 3, 5);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -413,7 +432,7 @@ export class Scene {
     trigg.setPosition(-70, 35, -15);
     trigg.addToScene();
 
-    var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+    tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
     tmpObj.setPosition(-75, 100, -60);
     tmpObj.setScale(2, 2, 2);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -421,7 +440,7 @@ export class Scene {
     trigg.registerObject3D(tmpObj);
     Scene.rocksCratesCollGroup.push(tmpObj);
 
-    var tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
+    tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
     tmpObj.setPosition(-75, 150, -60);
     tmpObj.setScale(0.2, 0.2, 0.3);
     tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -430,13 +449,13 @@ export class Scene {
     Scene.rocksCratesCollGroup.push(tmpObj);
 
     //destroyable door (castle top)
-    var tmpObj = new DestroyableObject3D(Scene.doorMesh, Scene.woodenDoorTex, Scene.redMaterial);
+    tmpObj = new DestroyableObject3D(Scene.doorMesh, Scene.woodenDoorTex, Scene.redMaterial);
     tmpObj.setPosition(-0.9, 49, -43);
     tmpObj.setScale(2.5, 1.5, 2);
     tmpObj.addToScene();
 
     //mobile wood boxes in dungeon
-    var tmpObj = new MobileObject3D(Scene.woodBox, Scene.woodenCrateTex);
+    tmpObj = new MobileObject3D(Scene.woodBox, Scene.woodenCrateTex);
     tmpObj.setPosition(-1, -2.5, -183);
     tmpObj.setScale(3, 4, 3);
     tmpObj.enablePhysics(true);
@@ -449,12 +468,12 @@ export class Scene {
     treasure.setPosition(-1, 25, -170);
     treasure.setScale(1, 1, 1);
     treasure.addToScene();
-    treasure.preUpdate = function (inst) {
+    treasure.preUpdate = function () {
       treasure.rotate(0, 1, 0);
     };
 
     //castle
-    var tmpObj = new Castle3D(
+    tmpObj = new Castle3D(
       Scene.castleExteriorMesh,
       Scene.castleExteriorTex,
       Scene.castleInteriorMesh,
@@ -483,39 +502,39 @@ export class Scene {
     Scene.rocksCratesCollGroup.push(tmpObj.objects[5]);
 
     //key
-    var tmpObj = new Key3D(Scene.keyMesh, Scene.keyMaterial);
+    tmpObj = new Key3D(Scene.keyMesh, Scene.keyMaterial);
     tmpObj.setPosition(-0.9, 50, -59);
     tmpObj.setScale(15, 15, 15);
     tmpObj.addToScene();
 
     //bridge with rocks
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(0, -15, 140);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(10, -10, 130);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(4, -4, 115);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(-8, -9, 108);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
     //houses
-    var tmpObj = new Object3D(Scene.house0Mesh, Scene.house0Tex);
+    tmpObj = new Object3D(Scene.house0Mesh, Scene.house0Tex);
     tmpObj.setPosition(40, 0, 200);
     tmpObj.setScale(0.5, 0.5, 0.5);
     tmpObj.addToScene();
 
-    var tmpObj = new Object3D(Scene.house1Mesh, Scene.house1Tex);
+    tmpObj = new Object3D(Scene.house1Mesh, Scene.house1Tex);
     tmpObj.setPosition(-30, 0, 350);
     tmpObj.setScale(0.25, 0.25, 0.25);
     tmpObj.addToScene();
@@ -537,11 +556,11 @@ export class Scene {
     };
 
     //ghost spawner
-    var tmpObj = new GhostSpawner3D();
+    tmpObj = new GhostSpawner3D();
     tmpObj.addToScene();
 
     //trees
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -550,7 +569,7 @@ export class Scene {
     tmpObj.setPosition(40, 0, 240);
     tmpObj.setScale(8, 8, 8);
     tmpObj.addToScene();
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -559,7 +578,7 @@ export class Scene {
     tmpObj.setPosition(-10, 0, 200);
     tmpObj.setScale(7, 10, 4);
     tmpObj.addToScene();
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -568,7 +587,7 @@ export class Scene {
     tmpObj.setPosition(5, 0, 300);
     tmpObj.setScale(10, 9, 10);
     tmpObj.addToScene();
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -577,7 +596,7 @@ export class Scene {
     tmpObj.setPosition(-30, 0, 210);
     tmpObj.setScale(5, 5, 5);
     tmpObj.addToScene();
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -586,7 +605,7 @@ export class Scene {
     tmpObj.setPosition(25, 0, 250);
     tmpObj.setScale(3, 4, 5);
     tmpObj.addToScene();
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -595,7 +614,7 @@ export class Scene {
     tmpObj.setPosition(-50, 0, 200);
     tmpObj.setScale(5, 5, 5);
     tmpObj.addToScene();
-    var tmpObj = new Tree3D(
+    tmpObj = new Tree3D(
       Scene.tree0TrunkMesh,
       Scene.tree0TrunkTex,
       Scene.tree0LeafsMesh,
@@ -611,25 +630,25 @@ export class Scene {
     dungeonLightsTrigg.oneShot = true;
     dungeonLightsTrigg.onTrigger = function (inst) {
       Scene.switchLights_Dungeon();
-      Scene.doorToDungeonL.close();
-      Scene.doorToDungeonR.close();
+      doorToDungeonL.close();
+      doorToDungeonR.close();
     };
     dungeonLightsTrigg.addToScene();
 
     //dungeon doors
-    var tmpObj = new Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
+    tmpObj = new Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
     tmpObj.setPosition(-135, -13, -57);
     tmpObj.setRotation(0, 90, 0);
     tmpObj.objects[0].setScale(1.8, 1.5, 1);
     tmpObj.addToScene();
 
-    var tmpObj = new Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
+    tmpObj = new Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
     tmpObj.setPosition(-129, -13, -91);
     tmpObj.setRotation(0, 90, 0);
     tmpObj.objects[0].setScale(1.6, 1.5, 1);
     tmpObj.addToScene();
 
-    var tmpObj = new DoorKey3D(
+    tmpObj = new DoorKey3D(
       Scene.doorMesh,
       Scene.woodenDoorTex,
       Scene.keyHoleMesh,
@@ -652,8 +671,8 @@ export class Scene {
       dungeonLightsTrigg.oneShot = true;
       dungeonLightsTrigg.onTrigger = function (inst) {
         Scene.switchLights_Dungeon();
-        Scene.doorToDungeonL.close();
-        Scene.doorToDungeonR.close();
+        doorToDungeonL.close();
+        doorToDungeonR.close();
       };
       dungeonLightsTrigg.addToScene();
       Scene.endCredits = true;
@@ -661,34 +680,34 @@ export class Scene {
     endGameTrigger.addToScene();
 
     //second key
-    var tmpObj = new Key3D(Scene.keyMesh, Scene.keyMaterial);
+    tmpObj = new Key3D(Scene.keyMesh, Scene.keyMaterial);
     tmpObj.setPosition(-109, -5, -94);
     tmpObj.setScale(15, 15, 15);
     tmpObj.addToScene();
 
     //second bridge with rocks
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(0, -15, -245);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(-10, -10, -265);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(-25, -5, -262);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
-    var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+    tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
     tmpObj.setPosition(-45, -2, -261);
     tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
     tmpObj.addToScene();
 
     //skybox
-    var tmpObj = new Object3D(Scene.skyboxMesh, Scene.skyboxTex);
+    tmpObj = new Object3D(Scene.skyboxMesh, Scene.skyboxTex);
     tmpObj.addToScene();
     tmpObj.setScale(350, 350, 450);
     tmpObj.boundingBoxes[0].setScaleCorrection(0, 0, 0);
@@ -734,7 +753,7 @@ export class Scene {
     cameraPath.addPoint(new CameraKeyFrame(0, 5, 80, 0, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, 5, 40, -90, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, 5, -10, 0, 0, 0));
-    Scene.camAnimator.addAnimation(new Animation(cameraPath, 500));
+    Scene.camAnimator.addAnimation(new Animation(cameraPath as unknown as BezierCurve, 500));
 
     cameraPath = new CameraBezierCurve();
     // // enter the dungeon
@@ -742,13 +761,13 @@ export class Scene {
     cameraPath.addPoint(new CameraKeyFrame(0, 6, -30, -10, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, -13, -50, -90, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, -10, -70, 0, 0, 0));
-    Scene.camAnimator.addAnimation(new Animation(cameraPath, 500));
+    Scene.camAnimator.addAnimation(new Animation(cameraPath as unknown as BezierCurve, 500));
 
     //pass through the door
     cameraPath = new CameraBezierCurve();
     cameraPath.addPoint(new CameraKeyFrame(0, -10, -70, 0, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, -5, -130, 0, 0, 0));
-    Scene.camAnimator.addAnimation(new Animation(cameraPath, 200));
+    Scene.camAnimator.addAnimation(new Animation(cameraPath as unknown as BezierCurve, 200));
 
     // traverse the tunnel
     cameraPath = new CameraBezierCurve();
@@ -757,19 +776,19 @@ export class Scene {
 
     cameraPath.addPoint(new CameraKeyFrame(-25, 15, -200, 150, 50, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, 0, -250, 0, 0, 0));
-    Scene.camAnimator.addAnimation(new Animation(cameraPath, 800));
+    Scene.camAnimator.addAnimation(new Animation(cameraPath as unknown as BezierCurve, 800));
     // exit the tunnel
     cameraPath = new CameraBezierCurve();
     cameraPath.addPoint(new CameraKeyFrame(0, 0, -250, 0, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, 0, -300, -100, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, 50, -280, -180, 0, 0));
-    Scene.camAnimator.addAnimation(new Animation(cameraPath, 500));
+    Scene.camAnimator.addAnimation(new Animation(cameraPath as unknown as BezierCurve, 500));
 
     // up to the sky
     cameraPath = new CameraBezierCurve();
     cameraPath.addPoint(new CameraKeyFrame(0, 50, -280, -180, 0, 0));
     cameraPath.addPoint(new CameraKeyFrame(0, 150, -280, -180, 20, 10));
-    Scene.camAnimator.addAnimation(new Animation(cameraPath, 500));
+    Scene.camAnimator.addAnimation(new Animation(cameraPath as unknown as BezierCurve, 500));
 
     Scene.camAnimator.play(true);
 

@@ -10,7 +10,23 @@ var Input_1 = require("./Input");
 var Texture_1 = require("./Texture");
 var Materials_1 = require("./Materials");
 var Lights_1 = require("./Lights");
+var Camera_1 = require("./Camera");
+var Player_1 = require("./Player");
 var Animator_1 = require("./Animator");
+var Object3D_1 = require("./Object3D/Object3D");
+var Lava3D_1 = require("./Object3D/Lava3D");
+var GravityTrigger3D_1 = require("./Object3D/GravityTrigger3D");
+var Key3D_1 = require("./Object3D/Key3D");
+var AutomaticBridge3D_1 = require("./Object3D/AutomaticBridge3D");
+var Lantern3D_1 = require("./Object3D/Lantern3D");
+var Door3D_1 = require("./Object3D/Door3D");
+var TriggerBox3D_1 = require("./Object3D/TriggerBox3D");
+var Ghost3D_1 = require("./Object3D/Ghost3D");
+var Tree3D_1 = require("./Object3D/Tree3D");
+var Castle3D_1 = require("./Object3D/Castle3D");
+var DestroyableObject3D_1 = require("./Object3D/DestroyableObject3D");
+var MobileObject3D_1 = require("./Object3D/MobileObject3D");
+var InterfaceOverlay_1 = require("./InterfaceOverlay");
 var Scene = /** @class */ (function () {
     function Scene() {
     }
@@ -94,14 +110,14 @@ var Scene = /** @class */ (function () {
         Scene.lavaMaterial.setAmbientLowColor(200, 0, 0, 255);
     };
     //add at the end
-    Scene.prototype.addObject3D = function (object) {
+    Scene.addObject3D = function (object) {
         Scene.objects.push(object);
     };
     //add at the beginning
-    Scene.prototype.addObject3D_ = function (object) {
+    Scene.addObject3D_ = function (object) {
         Scene.objects.unshift(object);
     };
-    Scene.prototype.removeObject3D = function (object) {
+    Scene.removeObject3D = function (object) {
         //remove from scene
         for (var i = 0; i < Scene.objects.length; i++)
             if (Scene.objects[i] == object)
@@ -111,7 +127,7 @@ var Scene = /** @class */ (function () {
             if (Scene.rocksCratesCollGroup[i] == object)
                 Scene.rocksCratesCollGroup.splice(i, 1);
     };
-    Scene.prototype.clearLanterns = function () {
+    Scene.clearLanterns = function () {
         for (var i = 0; i < Scene.lanterns.length; i++) {
             Scene.lanterns[i].removeFromScene();
         }
@@ -168,7 +184,7 @@ var Scene = /** @class */ (function () {
         ////		CREATE OBJECTS 3D
         ////__________________________________
         //player
-        Scene.player = new Player(Scene.unitCubeTexMesh, Scene.textureMaterial, Scene.rock1Mesh, Scene.rock1Tex);
+        Scene.player = new Player_1.Player(Scene.unitCubeTexMesh, Scene.textureMaterial, Scene.rock1Mesh, Scene.rock1Tex);
         Scene.player.setPosition(25, 30, 360);
         //player.setPosition(-1, 5, 0);
         Scene.player.setRotation(0, -90, 0);
@@ -176,24 +192,24 @@ var Scene = /** @class */ (function () {
         Scene.player.enableCollisionWith(Scene.objects);
         Scene.player.addToScene();
         //lava
-        Scene.lava = new Lava3D(Scene.lavaMesh, Scene.lavaMaterial);
+        Scene.lava = new Lava3D_1.Lava3D(Scene.lavaMesh, Scene.lavaMaterial);
         Scene.lava.setPosition(0, -10, 0);
         Scene.lava.setScale(3, 2, 3);
         Scene.rocksCratesCollGroup.push(Scene.lava);
         Scene.lava.addToScene();
         //trigger for falling rocks/boxes
-        var trigg = new GravityTrigger3D(35, 35, 35);
+        var trigg = new GravityTrigger3D_1.GravityTrigger3D(35, 35, 35);
         trigg.setPosition(0, 10, 40);
         trigg.addToScene();
         //rocks with gravity
-        var tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
+        var tmpObj = new Object3D_1.Object3D(Scene.stone0Mesh, Scene.stone0Tex);
         tmpObj.setPosition(-38, 150, 0);
         tmpObj.setScale(0.3, 0.35, 0.4);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
         tmpObj.addToScene();
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
-        var tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
+        tmpObj = new Object3D_1.Object3D(Scene.stone0Mesh, Scene.stone0Tex);
         tmpObj.setPosition(-45, 150, 35);
         tmpObj.setScale(0.2, 0.2, 0.3);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -201,28 +217,28 @@ var Scene = /** @class */ (function () {
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
         //destroyable wood boxes
-        var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+        tmpObj = new DestroyableObject3D_1.DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
         tmpObj.setPosition(-25, 50, 40);
         tmpObj.setScale(2, 2, 2);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
         tmpObj.addToScene();
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
-        var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+        tmpObj = new DestroyableObject3D_1.DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
         tmpObj.setPosition(-23, 80, 40);
         tmpObj.setScale(2, 3, 2);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
         tmpObj.addToScene();
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
-        var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+        tmpObj = new DestroyableObject3D_1.DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
         tmpObj.setPosition(-38, 105, 0);
         tmpObj.setScale(3, 3, 3);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
         tmpObj.addToScene();
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
-        var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+        tmpObj = new DestroyableObject3D_1.DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
         tmpObj.setPosition(-45, 100, 35);
         tmpObj.setScale(4, 3, 5);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -230,17 +246,17 @@ var Scene = /** @class */ (function () {
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
         //second trigger for falling rocks/boxes
-        var trigg = new GravityTrigger3D(15, 15, 15);
+        var trigg = new GravityTrigger3D_1.GravityTrigger3D(15, 15, 15);
         trigg.setPosition(-70, 35, -15);
         trigg.addToScene();
-        var tmpObj = new DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
+        tmpObj = new DestroyableObject3D_1.DestroyableObject3D(Scene.woodBox, Scene.woodenCrateTex, Scene.redMaterial);
         tmpObj.setPosition(-75, 100, -60);
         tmpObj.setScale(2, 2, 2);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
         tmpObj.addToScene();
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
-        var tmpObj = new Object3D(Scene.stone0Mesh, Scene.stone0Tex);
+        tmpObj = new Object3D_1.Object3D(Scene.stone0Mesh, Scene.stone0Tex);
         tmpObj.setPosition(-75, 150, -60);
         tmpObj.setScale(0.2, 0.2, 0.3);
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
@@ -248,12 +264,12 @@ var Scene = /** @class */ (function () {
         trigg.registerObject3D(tmpObj);
         Scene.rocksCratesCollGroup.push(tmpObj);
         //destroyable door (castle top)
-        var tmpObj = new DestroyableObject3D(Scene.doorMesh, Scene.woodenDoorTex, Scene.redMaterial);
+        tmpObj = new DestroyableObject3D_1.DestroyableObject3D(Scene.doorMesh, Scene.woodenDoorTex, Scene.redMaterial);
         tmpObj.setPosition(-0.9, 49, -43);
         tmpObj.setScale(2.5, 1.5, 2);
         tmpObj.addToScene();
         //mobile wood boxes in dungeon
-        var tmpObj = new MobileObject3D(Scene.woodBox, Scene.woodenCrateTex);
+        tmpObj = new MobileObject3D_1.MobileObject3D(Scene.woodBox, Scene.woodenCrateTex);
         tmpObj.setPosition(-1, -2.5, -183);
         tmpObj.setScale(3, 4, 3);
         tmpObj.enablePhysics(true);
@@ -261,15 +277,15 @@ var Scene = /** @class */ (function () {
         tmpObj.enableCollisionWith(Scene.rocksCratesCollGroup);
         tmpObj.addToScene();
         //end treasure
-        var treasure = new Object3D(Scene.treasureMesh, Scene.treasureMaterial);
+        var treasure = new Object3D_1.Object3D(Scene.treasureMesh, Scene.treasureMaterial);
         treasure.setPosition(-1, 25, -170);
         treasure.setScale(1, 1, 1);
         treasure.addToScene();
-        treasure.preUpdate = function (inst) {
+        treasure.preUpdate = function () {
             treasure.rotate(0, 1, 0);
         };
         //castle
-        var tmpObj = new Castle3D(Scene.castleExteriorMesh, Scene.castleExteriorTex, Scene.castleInteriorMesh, Scene.castleInteriorTex, Scene.castleTowersMesh, Scene.castleDoorsTex, Scene.castleDoorRMesh, Scene.castleDoorLMesh, Scene.keyHoleMesh, Scene.keyMesh, Scene.keyMaterial, Scene.castleFloorMesh, Scene.terrain1Tex, Scene.floorMesh, Scene.terrain0Tex, Scene.castleDungeonWallsMesh, Scene.castleDungeonWallsTex);
+        tmpObj = new Castle3D_1.Castle3D(Scene.castleExteriorMesh, Scene.castleExteriorTex, Scene.castleInteriorMesh, Scene.castleInteriorTex, Scene.castleTowersMesh, Scene.castleDoorsTex, Scene.castleDoorRMesh, Scene.castleDoorLMesh, Scene.keyHoleMesh, Scene.keyMesh, Scene.keyMaterial, Scene.castleFloorMesh, Scene.terrain1Tex, Scene.floorMesh, Scene.terrain0Tex, Scene.castleDungeonWallsMesh, Scene.castleDungeonWallsTex);
         tmpObj.setPosition(0, 0, 8);
         tmpObj.setScale(3, 3, 3);
         tmpObj.addToScene();
@@ -278,43 +294,43 @@ var Scene = /** @class */ (function () {
         Scene.rocksCratesCollGroup.push(tmpObj.objects[0]);
         Scene.rocksCratesCollGroup.push(tmpObj.objects[5]);
         //key
-        var tmpObj = new Key3D(Scene.keyMesh, Scene.keyMaterial);
+        tmpObj = new Key3D_1.Key3D(Scene.keyMesh, Scene.keyMaterial);
         tmpObj.setPosition(-0.9, 50, -59);
         tmpObj.setScale(15, 15, 15);
         tmpObj.addToScene();
         //bridge with rocks
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(0, -15, 140);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(10, -10, 130);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(4, -4, 115);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(-8, -9, 108);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
         //houses
-        var tmpObj = new Object3D(Scene.house0Mesh, Scene.house0Tex);
+        tmpObj = new Object3D_1.Object3D(Scene.house0Mesh, Scene.house0Tex);
         tmpObj.setPosition(40, 0, 200);
         tmpObj.setScale(0.5, 0.5, 0.5);
         tmpObj.addToScene();
-        var tmpObj = new Object3D(Scene.house1Mesh, Scene.house1Tex);
+        tmpObj = new Object3D_1.Object3D(Scene.house1Mesh, Scene.house1Tex);
         tmpObj.setPosition(-30, 0, 350);
         tmpObj.setScale(0.25, 0.25, 0.25);
         tmpObj.addToScene();
         //windmill
-        var base = new Object3D(Scene.windmillBaseMesh, Scene.windmillTex);
+        var base = new Object3D_1.Object3D(Scene.windmillBaseMesh, Scene.windmillTex);
         base.setPosition(-40, 0, 250);
         base.setScale(0.25, 0.25, 0.25);
         base.setRotation(0, -90, 0);
         base.addToScene();
-        var wheel = new Object3D(Scene.windmillWheelMesh, Scene.windmillTex);
+        var wheel = new Object3D_1.Object3D(Scene.windmillWheelMesh, Scene.windmillTex);
         wheel.setPosition(0.3, 174.1, 53.4);
         //wheel.setScale(0.25, 0.25, 0.25);
         wheel.setParent(base);
@@ -323,113 +339,113 @@ var Scene = /** @class */ (function () {
             wheel.rotate(0, 0, 1);
         };
         //ghost spawner
-        var tmpObj = new GhostSpawner3D();
+        tmpObj = new Ghost3D_1.GhostSpawner3D();
         tmpObj.addToScene();
         //trees
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(40, 0, 240);
         tmpObj.setScale(8, 8, 8);
         tmpObj.addToScene();
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(-10, 0, 200);
         tmpObj.setScale(7, 10, 4);
         tmpObj.addToScene();
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(5, 0, 300);
         tmpObj.setScale(10, 9, 10);
         tmpObj.addToScene();
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(-30, 0, 210);
         tmpObj.setScale(5, 5, 5);
         tmpObj.addToScene();
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(25, 0, 250);
         tmpObj.setScale(3, 4, 5);
         tmpObj.addToScene();
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(-50, 0, 200);
         tmpObj.setScale(5, 5, 5);
         tmpObj.addToScene();
-        var tmpObj = new Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
+        tmpObj = new Tree3D_1.Tree3D(Scene.tree0TrunkMesh, Scene.tree0TrunkTex, Scene.tree0LeafsMesh, Scene.tree0LeafsTex);
         tmpObj.setPosition(50, 0, 280);
         tmpObj.setScale(5, 5, 5);
         tmpObj.addToScene();
         //trigger to switch lights
-        var dungeonLightsTrigg = new TriggerBox3D(10, 20, 10);
+        var dungeonLightsTrigg = new TriggerBox3D_1.TriggerBox3D(10, 20, 10);
         dungeonLightsTrigg.setPosition(0, -5, -40);
         dungeonLightsTrigg.oneShot = true;
         dungeonLightsTrigg.onTrigger = function (inst) {
             Scene.switchLights_Dungeon();
-            Scene.doorToDungeonL.close();
-            Scene.doorToDungeonR.close();
+            Castle3D_1.doorToDungeonL.close();
+            Castle3D_1.doorToDungeonR.close();
         };
         dungeonLightsTrigg.addToScene();
         //dungeon doors
-        var tmpObj = new Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
+        tmpObj = new Door3D_1.Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
         tmpObj.setPosition(-135, -13, -57);
         tmpObj.setRotation(0, 90, 0);
         tmpObj.objects[0].setScale(1.8, 1.5, 1);
         tmpObj.addToScene();
-        var tmpObj = new Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
+        tmpObj = new Door3D_1.Door3D(Scene.doorMesh, Scene.woodenDoorTex, true, false);
         tmpObj.setPosition(-129, -13, -91);
         tmpObj.setRotation(0, 90, 0);
         tmpObj.objects[0].setScale(1.6, 1.5, 1);
         tmpObj.addToScene();
-        var tmpObj = new DoorKey3D(Scene.doorMesh, Scene.woodenDoorTex, Scene.keyHoleMesh, Scene.keyMesh, Scene.keyMaterial, null, false);
+        tmpObj = new Door3D_1.DoorKey3D(Scene.doorMesh, Scene.woodenDoorTex, Scene.keyHoleMesh, Scene.keyMesh, Scene.keyMaterial, null, false);
         tmpObj.setPosition(0.85, -12, -75);
         tmpObj.objects[0].setScale(1.6, 1.55, 1);
         tmpObj.addToScene();
-        var endGameTrigger = new TriggerBox3D(5, 5, 5);
+        var endGameTrigger = new TriggerBox3D_1.TriggerBox3D(5, 5, 5);
         endGameTrigger.setPosition(-1, 25, -170);
         endGameTrigger.oneShot = true;
         endGameTrigger.onTrigger = function (inst) {
             Scene.switchLights_Extern();
-            var dungeonLightsTrigg = new TriggerBox3D(10, 20, 10);
+            var dungeonLightsTrigg = new TriggerBox3D_1.TriggerBox3D(10, 20, 10);
             dungeonLightsTrigg.setPosition(0, -5, -40);
             dungeonLightsTrigg.oneShot = true;
             dungeonLightsTrigg.onTrigger = function (inst) {
                 Scene.switchLights_Dungeon();
-                Scene.doorToDungeonL.close();
-                Scene.doorToDungeonR.close();
+                Castle3D_1.doorToDungeonL.close();
+                Castle3D_1.doorToDungeonR.close();
             };
             dungeonLightsTrigg.addToScene();
             Scene.endCredits = true;
         };
         endGameTrigger.addToScene();
         //second key
-        var tmpObj = new Key3D(Scene.keyMesh, Scene.keyMaterial);
+        tmpObj = new Key3D_1.Key3D(Scene.keyMesh, Scene.keyMaterial);
         tmpObj.setPosition(-109, -5, -94);
         tmpObj.setScale(15, 15, 15);
         tmpObj.addToScene();
         //second bridge with rocks
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(0, -15, -245);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(-10, -10, -265);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(-25, -5, -262);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
-        var tmpObj = new AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
+        tmpObj = new AutomaticBridge3D_1.AutomaticBridge3D(40, 100, 40, Scene.rock0Mesh, Scene.rocksTex);
         tmpObj.setPosition(-45, -2, -261);
         tmpObj.boundingBoxes[0].setPositionCorrection(-1, 0, 0);
         tmpObj.addToScene();
         //skybox
-        var tmpObj = new Object3D(Scene.skyboxMesh, Scene.skyboxTex);
+        tmpObj = new Object3D_1.Object3D(Scene.skyboxMesh, Scene.skyboxTex);
         tmpObj.addToScene();
         tmpObj.setScale(350, 350, 450);
         tmpObj.boundingBoxes[0].setScaleCorrection(0, 0, 0);
         ///			CAMERA
         ///_______________________
-        Scene.lookAtCamera = new LookAtCamera();
+        Scene.lookAtCamera = new Camera_1.LookAtCamera();
         Scene.lookAtCamera.setLookRadius(15.0);
         Scene.lookAtCamera.setElevation(35.0);
         Scene.lookAtCamera.setLookPoint(0, 0, 0);
-        Scene.firstPersonCamera = new FirstPersonCamera();
+        Scene.firstPersonCamera = new Camera_1.FirstPersonCamera();
         Scene.firstPersonCamera.setElevation(0.0);
         Scene.firstPersonCamera.setPosition(0, 0, 0);
         Scene.firstPersonCamera.look();
@@ -492,7 +508,7 @@ var Scene = /** @class */ (function () {
         Scene.camAnimator.play(true);
         //lanterns
         //castle lantern
-        Scene.lanterns.push(new Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex, Scene.lights[1]));
+        Scene.lanterns.push(new Lantern3D_1.Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex, Scene.lights[1]));
         Scene.lanterns[0].setPosition(0, 12, 100);
         Scene.lanterns[0].animateColor = true;
         var lanternPath = new Animator_1.BezierCurve();
@@ -515,7 +531,7 @@ var Scene = /** @class */ (function () {
         };
         Scene.lanterns[0].addToScene();
         //blue lantern
-        Scene.lanterns.push(new Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex, Scene.lights[3]));
+        Scene.lanterns.push(new Lantern3D_1.Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex, Scene.lights[3]));
         Scene.lanterns[1].setPosition(-20, 10, 250);
         lanternPath = new Animator_1.BezierCurve();
         lanternPath.addPoint(new Animator_1.KeyFrame(0, 0, -15));
@@ -524,7 +540,7 @@ var Scene = /** @class */ (function () {
         Scene.lanterns[1].animator.addAnimation(new Animator_1.Animation(lanternPath, 300));
         Scene.lanterns[1].animator.play(true);
         Scene.lanterns[1].addToScene();
-        Scene.lanterns.push(new Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex, Scene.lights[2]));
+        Scene.lanterns.push(new Lantern3D_1.Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex, Scene.lights[2]));
         lanternPath = new Animator_1.BezierCurve();
         Scene.lanterns[2].setPosition(-20, 10, 320);
         lanternPath.addPoint(new Animator_1.KeyFrame(0, -3, 0));
@@ -532,7 +548,7 @@ var Scene = /** @class */ (function () {
         Scene.lanterns[2].animator.addAnimation(new Animator_1.Animation(lanternPath, 100));
         Scene.lanterns[2].animator.play(true);
         Scene.lanterns[2].addToScene();
-        Scene.lanterns.push(new Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex));
+        Scene.lanterns.push(new Lantern3D_1.Lantern3D(Scene.lanternMesh, Scene.lanternInteriorMesh, Scene.lanternTex));
         Scene.lanterns[3].setPosition(-10, -5, -30);
         lanternPath = new Animator_1.BezierCurve();
         lanternPath.addPoint(new Animator_1.KeyFrame(-10, -1, -30));
@@ -547,7 +563,7 @@ var Scene = /** @class */ (function () {
         //LOAD ASSETS
         Scene.loadMeshes();
         Scene.loadMaterials();
-        InterfaceOverlay.init();
+        InterfaceOverlay_1.InterfaceOverlay.init();
         //CREATE SCENE
         Scene.createObjects();
         window.requestAnimationFrame(Scene.waitsForTextures);
@@ -611,7 +627,7 @@ var Scene = /** @class */ (function () {
             Scene.objects[i].render();
         //game over screen
         if (this.gameOver) {
-            InterfaceOverlay.renderGameOver();
+            InterfaceOverlay_1.InterfaceOverlay.renderGameOver();
             //respawn
             if (Input_1.Input.isMouseDown()) {
                 Scene.createObjects();
@@ -625,9 +641,9 @@ var Scene = /** @class */ (function () {
             Scene.gameOver = true;
         }
         else if (!Scene.endCredits)
-            InterfaceOverlay.render();
+            InterfaceOverlay_1.InterfaceOverlay.render();
         else
-            InterfaceOverlay.renderCredits();
+            InterfaceOverlay_1.InterfaceOverlay.renderCredits();
         window.requestAnimationFrame(Scene.render);
     };
     ///_________________________________________________________

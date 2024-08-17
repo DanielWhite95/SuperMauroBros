@@ -214,6 +214,7 @@ var Animation = /** @class */ (function () {
 exports.Animation = Animation;
 var Animator = /** @class */ (function () {
     function Animator(object, instance) {
+        if (instance === void 0) { instance = null; }
         this.animations = [];
         this.duration = 0;
         this.playing = false;

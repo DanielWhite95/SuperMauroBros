@@ -1,36 +1,41 @@
 //Object with no mesh acting as a container
 //all objects in the group are linked in hieararchy to the group
-class GroupObject3D extends Object3D
+import {Scene } from "../Scene";
+import { Object3D } from "./Object3D";
+
+export class GroupObject3D extends Object3D
 {
-	constructor(mesh, material)
-	{
-		super(mesh, material);
+  objects;
+  objectsCount;
+    constructor(mesh, material)
+    {
+        super(mesh, material);
 
-		this.objects = [];
-		this.objectsCount = 0;
-	}
+        this.objects = [];
+        this.objectsCount = 0;
+    }
 
-	addObject3D(object)
-	{
-		this.objects[this.objectsCount] = object;
-		this.objects[this.objectsCount].setParent(this);
-		this.objectsCount++;
-	}
+    addObject3D(object)
+    {
+        this.objects[this.objectsCount] = object;
+        this.objects[this.objectsCount].setParent(this);
+        this.objectsCount++;
+    }
 
-	
-	//override
-	addToScene()
-	{
-		Scene.addObject3D(this);
 
-		for(var i=0; i<this.objectsCount; i++)
-			this.objects[i].addToScene();
-	}
+    //override
+    addToScene()
+    {
+        Scene.addObject3D(this);
 
-	removeFromScene()
-	{
-		for(var i=0; i<this.objectsCount; i++)
-			this.objects[i].removeFromScene();
-		Scene.removeObject3D(this);
-	}
+        for(var i=0; i<this.objectsCount; i++)
+            this.objects[i].addToScene();
+    }
+
+    removeFromScene()
+    {
+        for(var i=0; i<this.objectsCount; i++)
+            this.objects[i].removeFromScene();
+        Scene.removeObject3D(this);
+    }
 }

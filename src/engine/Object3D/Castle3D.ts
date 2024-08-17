@@ -1,41 +1,45 @@
-var doorToDungeonL;
-var doorToDungeonR;
+import { Door3D, DoorKey3D } from "./Door3D";
+import { GroupObject3D } from "./GroupObject3D";
+import { Object3D } from "./Object3D";
 
-class Castle3D extends GroupObject3D
+export var doorToDungeonL;
+export var doorToDungeonR;
+
+export class Castle3D extends GroupObject3D
 {
-	constructor(exteriorMesh, exteriorMaterial, 
-		interiorMesh, interiorMaterial, 
-		towersMesh, towersMaterial, 
-		doorRMesh, doorLMesh, keyHoleMesh, keyMesh, keyHoleMaterial,
-		floorMesh, floorMaterial, floor1Mesh, floor1Material,
-		dungeonWallsMesh, dungeonWallsMaterial)
-	{
-		super();
-		this.addObject3D(new Object3D(exteriorMesh, exteriorMaterial));
-		this.addObject3D(new Object3D(interiorMesh, interiorMaterial));
-		this.addObject3D(new Object3D(towersMesh, towersMaterial));
-		this.addObject3D(new Object3D(floorMesh, floorMaterial));
-		this.addObject3D(new Object3D(floor1Mesh, floor1Material));
-		this.addObject3D(new Object3D(dungeonWallsMesh, dungeonWallsMaterial));
+    constructor(exteriorMesh, exteriorMaterial,
+        interiorMesh, interiorMaterial,
+        towersMesh, towersMaterial,
+        doorRMesh, doorLMesh, keyHoleMesh, keyMesh, keyHoleMaterial,
+        floorMesh, floorMaterial, floor1Mesh, floor1Material,
+        dungeonWallsMesh, dungeonWallsMaterial)
+    {
+      super(interiorMesh, interiorMaterial);
+        this.addObject3D(new Object3D(exteriorMesh, exteriorMaterial));
+        this.addObject3D(new Object3D(interiorMesh, interiorMaterial));
+        this.addObject3D(new Object3D(towersMesh, towersMaterial));
+        this.addObject3D(new Object3D(floorMesh, floorMaterial));
+        this.addObject3D(new Object3D(floor1Mesh, floor1Material));
+        this.addObject3D(new Object3D(dungeonWallsMesh, dungeonWallsMaterial));
 
-		//main doors
-		var doorL = new Door3D(doorLMesh, towersMaterial, true, true);
-		doorL.setPosition(-3.6, 0, 22.5);
-		this.addObject3D(doorL);
+        //main doors
+        var doorL = new Door3D(doorLMesh, towersMaterial, true, true);
+        doorL.setPosition(-3.6, 0, 22.5);
+        this.addObject3D(doorL);
 
-		var doorR = new Door3D(doorRMesh, towersMaterial, true, false);
-		doorR.setPosition(2.85, 0, 22.5);
-		this.addObject3D(doorR);
+        var doorR = new Door3D(doorRMesh, towersMaterial, true, false);
+        doorR.setPosition(2.85, 0, 22.5);
+        this.addObject3D(doorR);
 
-		//doors to dungeon
-		doorToDungeonL = new Door3D(doorLMesh, towersMaterial, false, true);
-		doorToDungeonL.setPosition(-2.1, 0, -9);
-		doorToDungeonL.setScale(0.56, 0.76, 0.5);
-		this.addObject3D(doorToDungeonL);
+        //doors to dungeon
+        doorToDungeonL = new Door3D(doorLMesh, towersMaterial, false, true);
+        doorToDungeonL.setPosition(-2.1, 0, -9);
+        doorToDungeonL.setScale(0.56, 0.76, 0.5);
+        this.addObject3D(doorToDungeonL);
 
-		doorToDungeonR = new DoorKey3D(doorRMesh, towersMaterial, keyHoleMesh, keyMesh, keyHoleMaterial, doorToDungeonL, false);
-		doorToDungeonR.setPosition(1.5, 0, -9);
-		doorToDungeonR.setScale(0.56, 0.76, 0.5);
-		this.addObject3D(doorToDungeonR);
-	}
+        doorToDungeonR = new DoorKey3D(doorRMesh, towersMaterial, keyHoleMesh, keyMesh, keyHoleMaterial, doorToDungeonL, false);
+        doorToDungeonR.setPosition(1.5, 0, -9);
+        doorToDungeonR.setScale(0.56, 0.76, 0.5);
+        this.addObject3D(doorToDungeonR);
+    }
 }

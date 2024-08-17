@@ -1,134 +1,149 @@
-class Camera
+import * as utils from "../lib/utils";
+import { Globals } from "./globals"
+import { Scene } from "./Scene";
+import { Input } from "./Input";
+
+export class Camera
 {
-	constructor() 
-	{
-		this.angle 		= 0.0;
-		this.elevation 	= 0.0;
-	}
+  x = 0;
+  y = 0;
+  z = 0;
+  angle;
+  elevation;
 
-	setAngle(angle)
-	{
-		this.angle = angle;
-	}
+    constructor()
+    {
+        this.angle 		= 0.0;
+        this.elevation 	= 0.0;
+    }
 
-	setElevation(elevation)
-	{
-		this.elevation = elevation;
-	}
+    setAngle(angle)
+    {
+        this.angle = angle;
+    }
 
-	look()
-	{
-	}
+    setElevation(elevation)
+    {
+        this.elevation = elevation;
+    }
+
+    look()
+    {
+    }
 
 }
 
-class LookAtCamera extends Camera
+export class LookAtCamera extends Camera
 {
-	constructor() 
-	{	
-		super();
+  lookRadius;
+  xLook;
+  yLook;
+  zLook;
+    constructor()
+    {
+        super();
 
-		this.lookRadius	= 10.0;
+        this.lookRadius	= 10.0;
 
-		this.xLook 		= 0.0;
-		this.yLook		= 0.0;
-		this.zLook 	    = 0.0;
-	}
-	
-	setLookRadius(radius)
-	{
-		this.lookRadius = radius;
-	}
+        this.xLook 		= 0.0;
+        this.yLook		= 0.0;
+        this.zLook 	    = 0.0;
+    }
 
-	setLookPoint(x, y, z)
-	{
-		this.xLook = x;
-		this.yLook = y;
-		this.zLook = z;
-	}
+    setLookRadius(radius)
+    {
+        this.lookRadius = radius;
+    }
 
-	handleInput()
-	{
-		this.elevation += Input.getMouseDiffY() * 0.2;
-		this.lookRadius -= Input.getMouseWheelDiff() * 0.6;
-	}
+    setLookPoint(x, y, z)
+    {
+        this.xLook = x;
+        this.yLook = y;
+        this.zLook = z;
+    }
 
-	look()
-	{
-		if(!endCredits)
-			this.handleInput();
+    handleInput()
+    {
+        this.elevation += Input.getMouseDiffY() * 0.2;
+        this.lookRadius -= Input.getMouseWheelDiff() * 0.6;
+    }
 
-		//computes camera position
-		this.z = this.lookRadius * Math.cos(utils.degToRad(-this.angle)) * Math.cos(utils.degToRad(this.elevation));
-		this.x = this.lookRadius * Math.sin(utils.degToRad(-this.angle)) * Math.cos(utils.degToRad(this.elevation));
-		this.y = this.lookRadius * Math.sin(utils.degToRad(this.elevation));
+    look()
+    {
+        if(!Scene.endCredits)
+            this.handleInput();
 
-		//move camera towards the looking point
-		this.x += this.xLook;
-		this.y += this.yLook;
-		this.z += this.zLook;
+        //computes camera position
+        this.z = this.lookRadius * Math.cos(utils.degToRad(-this.angle)) * Math.cos(utils.degToRad(this.elevation));
+        this.x = this.lookRadius * Math.sin(utils.degToRad(-this.angle)) * Math.cos(utils.degToRad(this.elevation));
+        this.y = this.lookRadius * Math.sin(utils.degToRad(this.elevation));
 
-		viewMatrix = utils.MakeView(this.x, this.y, this.z, -this.elevation, this.angle);
-		projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
+        //move camera towards the looking point
+        this.x += this.xLook;
+        this.y += this.yLook;
+        this.z += this.zLook;
 
-		player.flashlight.setRotation(-this.elevation, 0, 0);
-	}
+        Globals.viewMatrix = utils.MakeView(this.x, this.y, this.z, -this.elevation, this.angle);
+        Globals.projectionMatrix = utils.multiplyMatrices(Globals.perspectiveMatrix, Globals.viewMatrix) as unknown as number[][];
+
+        Scene.player.flashlight.setRotation(-this.elevation, 0, 0);
+    }
 }
 
-class FirstPersonCamera  extends Camera
+export class FirstPersonCamera  extends Camera
 {
-	constructor() 
-	{	
-		super();
+    constructor()
+    {
+        super();
 
-		this.angle 		= 0.0;
-		this.elevation 	= 0;
+        this.angle 		= 0.0;
+        this.elevation 	= 0;
 
-		this.x		= 0.0;
-		this.y		= 0.0;
-		this.z 	    = 0.0;
-	}
+        this.x		= 0.0;
+        this.y		= 0.0;
+        this.z 	    = 0.0;
+    }
 
-	setPosition(x, y, z)
-	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-	
-	setAngle(angle)
-	{
-		this.angle = angle;
-	}
+    setPosition(x, y, z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
-	setElevation(elevation)
-	{
-		if(elevation < 90) {
-			if(elevation > -90)
-		   		this.elevation = elevation;		
-		   	else 
-		   		this.elevation = -90;
-		} else {
-			this.elevation = 90;
-		}
-	}
+    setAngle(angle)
+    {
+        this.angle = angle;
+    }
 
-	handleInput()
-	{
-		this.setElevation(this.elevation + Input.getMouseDiffY() * 0.2);
-	}
+    setElevation(elevation)
+    {
+        if(elevation < 90) {
+            if(elevation > -90)
+                this.elevation = elevation;
+            else
+                this.elevation = -90;
+        } else {
+            this.elevation = 90;
+        }
+    }
 
-	
+    handleInput()
+    {
+        this.setElevation(this.elevation + Input.getMouseDiffY() * 0.2);
+    }
 
 
-	look()
-	{
-		this.handleInput();
 
 
-		viewMatrix = utils.MakeView(this.x, this.y, this.z, -this.elevation, this.angle);
-		projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
+    look()
+    {
+        this.handleInput();
 
-		player.flashlight.setRotation(-this.elevation, 0, 0);
-	}
+
+        Globals.viewMatrix = utils.MakeView(this.x, this.y, this.z, -this.elevation, this.angle);
+      Globals.projectionMatrix = utils.multiplyMatrices(Globals.perspectiveMatrix, Globals.viewMatrix) as unknown as number[][];
+
+        Scene.player.flashlight.setRotation(-this.elevation, 0, 0);
+    }
 }
