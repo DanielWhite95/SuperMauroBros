@@ -7,7 +7,7 @@ export class GroupObject3D extends Object3D
 {
   objects;
   objectsCount;
-    constructor(mesh, material)
+    constructor(mesh = null, material = null)
     {
         super(mesh, material);
 

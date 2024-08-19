@@ -11,7 +11,7 @@ export class Lantern3D extends GroupObject3D
     linkedLight: any;
     constructor(mesh, interiorMesh, material, light = null)
     {
-      super(mesh, material);
+      super();
 
         var mainObj = new Object3D(mesh, material);
         mainObj.setScale(2, 2, 2);

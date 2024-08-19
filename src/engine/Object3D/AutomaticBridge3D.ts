@@ -11,7 +11,7 @@ export class AutomaticBridge3D extends GroupObject3D
 
     constructor(triggDx, triggDy, triggDz, mesh, material)
     {
-      super(mesh, material);
+      super();
 
         //main object
         this.mainObj = new Object3D(mesh, material);

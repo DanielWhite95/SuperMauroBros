@@ -14,7 +14,7 @@ export class Castle3D extends GroupObject3D
         floorMesh, floorMaterial, floor1Mesh, floor1Material,
         dungeonWallsMesh, dungeonWallsMaterial)
     {
-      super(interiorMesh, interiorMaterial);
+      super();
         this.addObject3D(new Object3D(exteriorMesh, exteriorMaterial));
         this.addObject3D(new Object3D(interiorMesh, interiorMaterial));
         this.addObject3D(new Object3D(towersMesh, towersMaterial));

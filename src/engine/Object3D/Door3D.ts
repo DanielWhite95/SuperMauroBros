@@ -11,7 +11,7 @@ export class Door3D extends GroupObject3D
     animator: Animator;
     constructor(mesh, material, automatic, openFromRight)
     {
-      super(mesh, material);
+      super();
 
         var doorPar = new GroupObject3D(null, material);
 
@@ -93,7 +93,7 @@ export class DoorKey3D extends GroupObject3D
     animator: Animator;
     constructor(mesh, material, keyHoleMesh, keyMesh, keyHoleMaterial, linkedDoor, openFromRight)
     {
-      super(mesh, material);
+      super();
 
         var doorPar = new GroupObject3D(null, material);
 

@@ -64,7 +64,7 @@ class Ghost3D extends GroupObject3D
     currAnim: Animator;
     constructor(mesh, material, tongueMesh, tongueMaterial)
     {
-      super(mesh, material);
+      super();
 
         this.enablePhysics(true);
         this.enableGravity(false);
